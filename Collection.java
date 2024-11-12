@@ -22,6 +22,13 @@ Why Map Interface does not extend Collection interface?
     However there are many methods to retrieve keys and values as collection.
 
 What is the difference between Collection and Collections?
+	Collection is an interface in Java that represents a group of objects.
+	It is the root interface in the Java Collections Framework, 
+	and all other collection types (like List, Set, and Queue) extend or implement this interface.
+
+	Collections is a utility class in Java that contains static methods for working with collections. 
+	It is part of java.util and provides methods to manipulate or operate on collections, such as sorting, reversing, 
+	and finding maximum/minimum elements.
 
 Why Collection Interface does not extend Serializable and Cloneable interfaces?
     'There is no need to do it!'
@@ -108,6 +115,41 @@ What are the different ways to iterate over a list?
             3. Enumeration
 
 What is the difference between Iterator and ListIterator and Enumeration?
+	    1. Iterator (Introduced in Java 1.2)
+	Iterator is the most general-purpose iterator and can be used with most Collection classes (e.g., List, Set, Queue, etc.).
+	It allows you to iterate over a collection in a forward direction only.
+	Key Methods:
+	hasNext(): Returns true if there are more elements to iterate.
+	next(): Returns the next element in the collection and advances the iterator.
+	remove(): Removes the last element returned by the iterator (optional operation).
+	    Use case: Iterator is used when you need to iterate over elements
+	    in any collection like List, Set, etc., but you don’t need to go backward or modify the collection while iterating.
+	2. ListIterator (A Subinterface of Iterator)
+	ListIterator is a more advanced version of the Iterator interface. It extends Iterator and is specific to List collections (e.g., ArrayList, LinkedList),
+	meaning it can be used only on List types, not other collection types like Set or Queue.
+	It provides additional methods that allow you to traverse the list in both directions (forward and backward), as well as modify the list during iteration.
+	Key Methods:
+	All methods of Iterator (hasNext(), next(), remove()) are available.
+	Additional methods:
+	hasPrevious(): Returns true if there’s an element before the current position.
+	previous(): Returns the previous element and moves the cursor backwards.
+	add(E e): Adds an element to the list at the current position.
+	set(E e): Replaces the last element returned by next() or previous() with the specified element.
+	nextIndex(): Returns the index of the element that would be returned by a subsequent call to next().
+	previousIndex(): Returns the index of the element that would be returned by a subsequent call to previous().
+	Use case: Use ListIterator when you need to iterate over a List in both directions and modify the list during iteration (e.g., adding or updating elements).
+	
+	3. Enumeration (Introduced in Java 1.0)
+	Enumeration is an older interface (from the original version of Java) and has been mostly superseded by Iterator in modern Java. It was primarily used in the legacy classes like Vector, Stack, and Properties, and it is still available for backward compatibility.
+	It provides a simpler, less feature-rich way to iterate through elements in a collection and only allows forward traversal.
+	Key Methods:
+	hasMoreElements(): Returns true if there are more elements to iterate.
+	nextElement(): Returns the next element in the enumeration.
+
+	Use case: Enumeration is typically used when working with legacy classes (like Vector, Stack) 
+	or when maintaining backward compatibility. It is rarely used in modern code since Iterator offers more flexibility and functionality.
+
+
 
 What are the legacy implementations?
     Vector is a legacy class.
@@ -130,6 +172,50 @@ What are the legacy implementations?
       -> to remove the top element : pop()
 
 What are the similarities and difference between ArrayList and Vector?
+	Similarities Between ArrayList and Vector:
+	Both Implement the List Interface:
+	
+	Both ArrayList and Vector implement the List interface, meaning they both support common operations like adding, removing, and accessing elements by index.
+	Example operations: add(), get(), remove(), size(), etc.
+	Both Allow Dynamic Sizing:
+	
+	Both ArrayList and Vector grow dynamically as elements are added. They start with an initial capacity, and if that capacity is exceeded, they automatically resize themselves.
+	Index-Based Access:
+	
+	Both ArrayList and Vector provide constant-time (O(1)) access to elements via an index using the get(int index) method.
+	Both Can Contain Null Elements:
+	
+	Both ArrayList and Vector can store null values as elements (unless otherwise restricted by your application).
+	Both Are Part of the Java Collections Framework:
+	
+	Both classes are part of the java.util package and are considered part of the Collections Framework.
+	
+	Key Differences Explained in Detail:
+
+	Synchronization:
+	
+	ArrayList: Not synchronized, which means it is not thread-safe by default. If you're working in a multi-threaded environment and need a thread-safe collection,
+	you would either use Vector, or better yet, consider using collections from the java.util.concurrent package, such as CopyOnWriteArrayList.
+	Vector: Synchronized, which means it is thread-safe out-of-the-box. This makes Vector suitable for multi-threaded environments,
+	but the synchronization overhead can make it slower in situations where thread safety is not necessary.
+	
+	Resizing (Growth Factor):
+	
+	ArrayList: Grows by 50% of the current size when it needs more space, meaning its capacity increases at a slower rate compared to Vector. This can result in fewer resizing operations, which improves performance in some cases.
+	Vector: Grows by doubling its size when more space is needed. This can sometimes lead to wasted memory, especially if the number of elements grows in smaller increments, as the Vector will allocate a large amount of unused space when it doubles.
+	Performance:
+	
+	ArrayList tends to be more performant than Vector in single-threaded scenarios because it doesn't incur the synchronization overhead.
+	Vector, being synchronized, incurs additional performance costs, especially in single-threaded contexts where synchronization is unnecessary.
+	Legacy Methods:
+	
+	ArrayList does not have legacy methods such as addElement() and removeElement(), which were specific to Vector and are considered outdated.
+	ArrayList uses modern methods like add(), remove(), and clear().
+	Vector still includes these legacy methods for compatibility with older codebases.
+	Memory Usage:
+	
+	ArrayList uses less memory compared to Vector in general, because it does not double the size of its array when it grows. It grows by a fixed percentage (50%).
+	Vector can sometimes use more memory because it doubles its array size, leading to more unused space, especially when the number of elements grows incrementally.
 
 Which collection classes provide random access of its elements?
     These are the collection classes which provide random access:
@@ -174,6 +260,23 @@ What are Stack and Queue? How they are different?
 
     So thats the difference between Stack and queue.. Stack is a class and queue is an interface.
 
+what are the implementation of queue intefcace in java collections?
+	   Common classes that implement the Queue interface include LinkedList, PriorityQueue, and ArrayDeque. 
+	     LinkedList is commonly used to implement the Queue interface due to its efficient insertion and removal at both ends.
+		PriorityQueue is another implementation of Queue that orders elements based on their natural order or custom comparator, not FIFO.
+		ArrayDeque is a more efficient alternative to LinkedList for queue operations when you do not need thread safety.
+
+	    Key Methods in the Queue Interface:
+		Here are some of the key methods provided by the Queue interface:
+		
+		add(E e): Adds the specified element to the queue. Throws IllegalStateException if the element cannot be added (e.g., due to capacity restrictions).
+		offer(E e): Adds the specified element to the queue. Returns true if the element was added successfully, or false if it could not be added.
+		remove(): Removes and returns the front element of the queue. Throws NoSuchElementException if the queue is empty.
+		poll(): Removes and returns the front element of the queue, or null if the queue is empty.
+		peek(): Returns the front element of the queue without removing it. Returns null if the queue is empty.
+		element(): Returns the front element of the queue without removing it. Throws NoSuchElementException if the queue is empty.
+	   
+
 How can we sort Collections?
     There are some implementations of set and map which are used to store elements in a sorting order.
     -> SortedMap, SortedSet etc. - can be used to get a sorted collection(Map or Set).
@@ -208,8 +311,105 @@ When should we use List and when to use Set??
     👉🏻 If we want a collection of unique objects then we should use Set.
 
 How does HashSet is implemented? How does it use Hashing?
+	    How HashSet Works and Uses Hashing
+		A HashSet in Java is implemented using a HashMap under the hood. Specifically, it uses the HashMap class to store its elements, where:
+		
+		The element itself is stored as a key.
+		The associated value for each key is a constant object (typically a static dummy object, like PRESENT).
+		The hashing mechanism involves mapping each element to a hash code that is used to determine
+	    	where in the underlying hash table the element should be stored.
+		
+		Here’s a step-by-step breakdown of how HashSet works internally with hashing:
+		
+		1. Hashing the Element
+		Each element added to the HashSet is passed to the hashCode() method, which computes an integer hash value for the object.
+		The hash code is then used to determine the bucket where the element will be stored.
+		java
+		Copy code
+		int hashCode = element.hashCode();
+		2. Bucket Index Calculation
+		The hash code is used to compute the bucket index in the internal hash table (an array of buckets).
+		The bucket index is calculated using a formula such as:
+		java
+		Copy code
+		index = hashCode % table.length;
+		This ensures that the elements are distributed across different "buckets" or "slots" in the table.
+		
+		3. Handling Collisions
+		Since the hash code for different objects may result in the same index (i.e., multiple elements may have the same bucket index), collisions occur.
+		To handle collisions, HashSet uses chaining with linked lists (or sometimes other structures like balanced trees, depending on the implementation).
+		When a collision occurs, the element is simply added to the linked list (or tree) at the corresponding bucket index.
+		For example:
+		
+		Two objects, A and B, may have the same hash code and end up in the same bucket. The second object will be added to the linked list or another internal structure associated with the bucket.
+		If A is already in the set and B is also added but B is equal to A (according to equals() method), B will not be added because HashSet does not allow duplicates.
+		4. Equality Check (equals() Method)
+		When an element is added to the HashSet, it must pass two checks:
+		Hash Code Comparison: The hash code of the element is computed and compared with other elements in the same bucket (if they share the same bucket index).
+		Equality Check (equals()): If elements have the same hash code, the equals() method is used to check whether the new element is equal to an existing element.
+		If the equals() method returns true, the element is not added again (i.e., duplicates are prevented).
+		Internal Structure of HashSet
+		Here is a rough idea of the internal structure of a HashSet:
+		
+		HashMap: The HashSet internally uses a HashMap to store its elements. The keys of the HashMap are the elements of the HashSet, and the values are typically a dummy constant object (such as PRESENT).
+		Buckets: The HashMap maintains an array of buckets, where each bucket is a linked list (or tree for high-collision situations) of elements that have the same hash code.
+		Resize: When the number of elements exceeds a certain threshold (defined by the load factor), the hash table is resized, and the elements are rehashed to distribute them more evenly across the buckets.
 
 What are Comparable and Comparator interface? When to use what?
+	1. Comparable Interface
+	The Comparable interface is used to define the natural ordering of objects of a class.
+	It is typically implemented by classes whose instances need to be compared with each other for sorting purposes.
+	public int compareTo(T o);
+	import java.util.*;
+
+class Person implements Comparable<Person> {
+    String name;
+    int age;
+
+    public Person(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+
+    @Override
+    public int compareTo(Person other) {
+        // Compare by age
+        return Integer.compare(this.age, other.age);
+    }
+
+    @Override
+    public String toString() {
+        return name + " (" + age + ")";
+    }
+
+    public static void main(String[] args) {
+        List<Person> people = Arrays.asList(
+            new Person("Alice", 30),
+            new Person("Bob", 25),
+            new Person("Charlie", 35)
+        );
+
+        // Sorting using natural order (age)
+        Collections.sort(people);
+        System.out.println(people);
+    }
+}
+
+
+
+Key Points About Comparable:
+Location: It is part of the java.lang package.
+
+2. Comparator Interface
+The Comparator interface is used to define an external comparison strategy for objects. Unlike Comparable, which defines the default sorting order within the object itself, Comparator allows you to define multiple ways to compare objects outside of the objects' class.
+
+Key Points About Comparator:
+Location: It is part of the java.util package.
+
+Method: It defines two methods:
+int compare(T o1, T o2);    // Compares two objects
+boolean equals(Object obj);  // Checks equality (optional)
+
 
 Whats difference between TreeSet and LinkedHashSet and HashSet?
     These are the implementations of Set.
@@ -282,8 +482,43 @@ What is the difference between remove() method of Collection and remove() method
     -> Iterator.remove() is advised to use for remove element while iterating.
 
 How HashMap works in Java?
+	Key Features of HashMap:
+	No duplicates in keys: A HashMap does not allow duplicate keys, but it allows duplicate values.
+	Unordered: The entries (key-value pairs) are not ordered. The order of keys and values is not guaranteed,
+	as it depends on the hash function and the internal resizing.
+	Null values: HashMap allows one null key and multiple null values.
+	Thread-unsafe: HashMap is not thread-safe. If multiple
+	threads access the HashMap concurrently and at least one of the threads modifies the map structurally, it must be synchronized externally.
+	How HashMap Works Internally
+	The internal structure of a HashMap is a hash table with the following key components:
+	
+	Hash Table (Array of Buckets): The HashMap uses an array of buckets (or "bins"), where each bucket is a 
+	linked list or tree (depending on the implementation and number of collisions).
+	
+	Hashing: When you add a key-value pair to the HashMap, the key's hash code is computed using 
+	the key’s hashCode() method. The hash code is then used to determine the index in the hash table
+	where the entry should be stored. This is done through a hash function, which helps map the key to an index in the array.
+	
+	Collision Handling: Hash collisions happen when two keys produce the same hash code. 
+	In this case, the HashMap uses a technique called chaining to store multiple key-value pairs in the same bucket. 
+	Initially, this is done with a linked list. If the number of elements in a bucket becomes too large,
+	the linked list can be converted into a balanced tree for faster lookups.
+	
+	Resizing: As the number of entries grows, 
+	the HashMap might exceed the load factor threshold (by default, it's 0.75). 
+	This triggers a resizing operation where the capacity of the hash table is increased (typically doubled), and all the entries are rehashed to the new array.
 
 Whats the difference between HashMap and HashTable?
+	Summary of Differences Between HashMap and Hashtable
+	Feature					HashMap								Hashtable
+	Thread Safety				Not synchronized, not thread-safe				Synchronized, thread-safe
+	Null Keys/Values			Allows 1 null key and multiple null values			Does not allow null keys or values
+	Performance				Faster due to lack of synchronization				Slower due to synchronization overhead
+	Inheritance				Implements Map interface (modern)				Extends Dictionary interface (legacy)
+	Iteration				Uses Iterator (fail-fast)					Uses Enumeration (legacy), supports Iterator
+	Usage					Preferred for new code						Legacy class, not recommended for new code
+	Resizing Mechanism			Grows dynamically when load factor is reached			Grows dynamically but synchronized at each step
+	Order of Elements			No guaranteed order						No guaranteed order
 
 Can we use a Custom object as a key in HashMap? If yes then How?
     Yes! we may create custom object key for HashMap.
